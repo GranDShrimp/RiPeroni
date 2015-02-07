@@ -1,7 +1,12 @@
 package com.riperoni.riperoni;
 
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -17,20 +22,36 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 
 public class ChooseSong extends ActionBarActivity {
+    private ArrayList<Song> songArrayList = new ArrayList<Song>();
+
+    public ChooseSong() {
+        System.out.println("Made Song Fragment");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_song);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, new SongFragment())
                     .commit();
         }
     }
 
+    public void setSongArrayList(ArrayList<Song> songArrayList) {
+        this.songArrayList = songArrayList;
+    }
+
+    public ArrayList<Song>  getSongArrayList() {
+        return this.songArrayList;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,36 +78,64 @@ public class ChooseSong extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class SongFragment extends Fragment {
+        ArrayList<Song> songArrayList;
+        private Context context;
 
-        public PlaceholderFragment() {
+        private static ArrayList<Song> getSongs(Context context) {
+            ArrayList<Song> songList = new ArrayList<Song>();
+            String[] retCol = {MediaStore.Audio.Media._ID};
+            ContentResolver contentResolver = context.getContentResolver();
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            Cursor cur = contentResolver.query(uri, null, null, null, null);
+            if(cur == null) {
+                //Severe failure
+            }
+            else if(!cur.moveToFirst()) {
+                //No media
+            }
+            else {
+                int titleColumn = cur.getColumnIndex(MediaStore.Audio.Media.TITLE);
+                int idColumn = cur.getColumnIndex(MediaStore.Audio.Media._ID);
+                int artistColumn = cur.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+                int durationColumn = cur.getColumnIndex(MediaStore.Audio.Media.DURATION);
+                do {
+                    songList.add(new Song(cur.getString(titleColumn),
+                        cur.getString(artistColumn),
+                        cur.getInt(durationColumn),
+                        ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, cur.getLong(idColumn))));
+                } while(cur.moveToNext());
+            }
+            System.out.println(songList.size());
+            Iterator<Song> it = songList.iterator();
+            while(it.hasNext()){
+                System.out.println(it.next().getTitle());
+            }
+            return songList;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_choose_song, container, false);
-            ArrayAdapter<String> adapt = new ArrayAdapter<String>(getActivity(), R.layout.song_layout, R.id.song_layout_TextView,fakeData);
+            context=container.getContext();
+            songArrayList = getSongs(context);
+//            ArrayAdapter<Song> adapt = new ArrayAdapter<Song>(
+//                    getActivity().getApplicationContext(),
+//                    R.layout.song_layout,
+//                    R.id.song_layout_TextView,
+//                    songArrayList);
+//
+//            ListView litem = (ListView) rootView.findViewById(R.id.songList);
+//            litem.setAdapter(adapt);
+//            litem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//
+//                }
+//            });
 
-
-            ListView litem = (ListView) rootView.findViewById(R.id.songList);
-            litem.setAdapter(adapt);
-            litem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Context context = parent.getContext();
-                    CharSequence text = fakeData.get(position);
-                    int duration = Toast.LENGTH_LONG;
-
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
-
-                    Intent intent = new Intent(context, DetailActivity.class);
-                    intent.addCategory(fakeData.get(position));
-                    startActivity(intent);
-
-                }
-            });
             return rootView;
         }
     }

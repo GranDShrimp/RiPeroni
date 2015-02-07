@@ -1315,10 +1315,11 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f08002e;
         public static final int action_mode_bar_stub=0x7f08002d;
         public static final int action_mode_close_button=0x7f080020;
-        public static final int action_settings=0x7f080040;
+        public static final int action_settings=0x7f080043;
         public static final int activity_chooser_view_content=0x7f080021;
         public static final int always=0x7f080016;
         public static final int beginning=0x7f080013;
+        public static final int button=0x7f080041;
         public static final int checkbox=0x7f080029;
         public static final int collapseActionView=0x7f080017;
         public static final int container=0x7f08003f;
@@ -1359,6 +1360,8 @@ containing a value of this type.
         public static final int showCustom=0x7f08000f;
         public static final int showHome=0x7f080010;
         public static final int showTitle=0x7f080011;
+        public static final int songList=0x7f080040;
+        public static final int song_layout_TextView=0x7f080042;
         public static final int split_action_bar=0x7f080007;
         public static final int submit_area=0x7f08003c;
         public static final int tabMode=0x7f08000b;
@@ -1395,12 +1398,16 @@ containing a value of this type.
         public static final int abc_search_dropdown_item_icons_2line=0x7f030014;
         public static final int abc_search_view=0x7f030015;
         public static final int abc_simple_dropdown_hint=0x7f030016;
-        public static final int activity_ri_peroni=0x7f030017;
-        public static final int fragment_ri_peroni=0x7f030018;
-        public static final int support_simple_spinner_dropdown_item=0x7f030019;
+        public static final int activity_choose_song=0x7f030017;
+        public static final int activity_main=0x7f030018;
+        public static final int fragment_choose_song=0x7f030019;
+        public static final int fragment_main=0x7f03001a;
+        public static final int song_layout=0x7f03001b;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
     }
     public static final class menu {
-        public static final int menu_ri_peroni=0x7f0c0000;
+        public static final int menu_choose_song=0x7f0c0000;
+        public static final int menu_main=0x7f0c0001;
     }
     public static final class string {
         public static final int abc_action_bar_home_description=0x7f0a0000;
@@ -1422,6 +1429,7 @@ containing a value of this type.
         public static final int action_settings=0x7f0a0010;
         public static final int app_name=0x7f0a0011;
         public static final int hello_world=0x7f0a0012;
+        public static final int title_activity_choose_song=0x7f0a0013;
     }
     public static final class style {
         /**  Customize your theme here. 
