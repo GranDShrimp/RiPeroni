@@ -18,7 +18,10 @@ import android.os.Build;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Toast;
+
+import java.lang.Override;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -62,7 +65,7 @@ public class MainActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements OnSeekBarChangeListener {
 
         private static Song currentSong;
         private static MediaPlayer player;
@@ -115,7 +118,26 @@ public class MainActivity extends ActionBarActivity {
                     }
 
                 }
-            }
+            })
+
+            SeekBar songDuration = (SeekBar) rootview.findViewById(R.id.duration_Seekbar);
+            songDuration.setOnSeekChangeBarListener(new View.OnSeekChangeBarListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progresValue boolean fromUser,) {
+                    progress = progresValue;
+                    Toast.maketext(getApplicationContext(), "Changing position in song...", Toast.LENGTH_SHORT).show();
+                }
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    Toast.makeText(getApplicationContext(), "Started tracking song position.", Toast.LENGTH_SHORT).show();
+                }
+                @Override
+                public void onStopTrackingTouch (SeekBar seekBar) {
+                    textView.setText("Covered: " + progress + "/" + seekBar.getMax());
+                    Toast.makeText(getApplicationContext(), "Stopped tracking song position.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
 
 
             return rootView;
