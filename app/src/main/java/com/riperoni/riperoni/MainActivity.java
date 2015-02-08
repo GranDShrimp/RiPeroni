@@ -2,6 +2,7 @@ package com.riperoni.riperoni;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -32,7 +33,6 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new MainActivity.PlaceholderFragment())
                     .commit();
             //Create Layout here?
-            RDriver driver = new RDriver();
         }
     }
 
@@ -64,6 +64,13 @@ public class MainActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        private static Song currentSong;
+        private static MediaPlayer player;
+
+        public static void setCurrentSong(Song newSong) {
+            currentSong = newSong;
+        }
+
         public PlaceholderFragment() {
         }
 
@@ -71,29 +78,46 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            rootView.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    if(MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_MOVE) {
-//                        View mainView = inflater.infl
-//                        Intent intent = new Intent(v.get.getContext(), ChooseSong.class);
-//                        startActivity(intent);
-//                    }
-//                    return true;
-//                }
-//            }
-//            );
+
+
+            /*********Action Listeners**********/
+
             Button songButton = (Button) rootView.findViewById(R.id.button);
             songButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Context context = v.getContext();
 
+                    Song oldSong = currentSong;
+
+
                     Intent intent = new Intent(context, ChooseSong.class);
                     startActivity(intent);
 
+                    if(oldSong.getSongUri().compareTo(currentSong().getSongUri()) != 0 ) {
+                        player.release();
+                        player.create(v.getContext(), currentSong.getSongUri());
+                    }
                 }
             });
+
+            Button playButton = (Button) rootView.findViewById(R.id.play_button);
+            playButton.setOnClickListener(new View.OnLongClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(player.isPlaying()) {
+                        player.pause();
+                        v.setBackground(@drawable/play_button);
+                    }
+                    else {
+                        player.start();
+                        v.setBackground(@drawable/pause_button);
+                    }
+
+                }
+            }
+
+
             return rootView;
         }
     }

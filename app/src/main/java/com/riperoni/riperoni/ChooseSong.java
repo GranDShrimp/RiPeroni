@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
@@ -81,6 +82,7 @@ public class ChooseSong extends ActionBarActivity {
     public static class SongFragment extends Fragment {
         ArrayList<Song> songArrayList;
         private Context context;
+        private Song currentSong;
 
         private static ArrayList<Song> getSongs(Context context) {
             ArrayList<Song> songList = new ArrayList<Song>();
@@ -120,6 +122,7 @@ public class ChooseSong extends ActionBarActivity {
             View rootView = inflater.inflate(R.layout.fragment_choose_song, container, false);
             context=container.getContext();
             songArrayList = getSongs(context);
+//
 //            ArrayAdapter<Song> adapt = new ArrayAdapter<Song>(
 //                    getActivity().getApplicationContext(),
 //                    R.layout.song_layout,
@@ -135,6 +138,10 @@ public class ChooseSong extends ActionBarActivity {
 //
 //                }
 //            });
+
+            //setCurrentSong
+
+            MainActivity.PlaceholderFragment.setCurrentSong(currentSong);
 
             return rootView;
         }
