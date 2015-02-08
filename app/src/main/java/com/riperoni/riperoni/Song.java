@@ -12,14 +12,14 @@ public class Song {
     private String title;
     private String artist;
     private int duration;
-    private Uri songFile;
+    private Uri songUri;
 
     //Constructor
-    public Song(String title, String artist, int duration, Uri songFile){
+    public Song(String title, String artist, int duration, Uri songUri){
         this.title = title;
         this.artist = artist;
         this.duration = duration;
-        this.songFile = songFile;
+        this.songUri = songUri;
     }
 
     //Getter Methods
@@ -35,7 +35,7 @@ public class Song {
         return duration;
     }
 
-    public Uri getSongFile(){
-        return songFile;
+    public Uri getSongUri(){
+        return songUri;
     }
 }
